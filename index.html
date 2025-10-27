@@ -1,55 +1,55 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Statistik Kecamatan Kota Bandung</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body{margin:0;font-family:Inter,system-ui;background:#0f172a;color:#e6eef6;padding:24px;text-align:center}
-  .container{max-width:1000px;margin:auto;background:#0b1220b0;padding:20px;border-radius:12px}
-  .logo2 img{width:120px;margin-bottom:10px;background:#fff;border-radius:8px;padding:6px}
-  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
-  th,td{padding:8px 10px;border:1px solid #1e293b}
-  thead{background:#1e293b}
-  tr:hover{background:#172554}
-  input,button{padding:8px 12px;border-radius:6px;border:none;margin:6px}
-  button{background:#06b6d4;color:#021322;font-weight:600;cursor:pointer}
-  canvas{margin-top:20px;background:#1e293b;border-radius:10px;padding:10px}
-  footer{margin-top:10px;color:#9ca3af;font-size:13px}
-</style>
+<!doctype html> <!-- Menentukan tipe dokumen HTML -->
+<html lang="id"> <!-- Bahasa dokumen: Indonesia -->
+<head> <!-- Bagian kepala dokumen -->
+<meta charset="utf-8"> <!-- Mengatur encoding karakter UTF-8 -->
+<meta name="viewport" content="width=device-width,initial-scale=1"> <!-- Agar tampilan responsif di perangkat mobile -->
+<title>Statistik Kecamatan Kota Bandung</title> <!-- Judul halaman di tab browser -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Memuat library Chart.js dari CDN -->
+<style> /* ====== CSS UNTUK DESAIN HALAMAN ====== */
+  body{margin:0;font-family:Inter,system-ui;background:#0f172a;color:#e6eef6;padding:24px;text-align:center} /* Gaya umum body: tanpa margin, font modern, latar belakang gelap, teks terang */
+  .container{max-width:1000px;margin:auto;background:#0b1220b0;padding:20px;border-radius:12px} /* Kontainer utama tengah dengan latar semi-transparan */
+  .logo2 img{width:120px;margin-bottom:10px;background:#fff;border-radius:8px;padding:6px} /* Logo kecil dengan latar putih dan sudut tumpul */
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px} /* Tabel memenuhi lebar, tanpa jarak antar sel */
+  th,td{padding:8px 10px;border:1px solid #1e293b} /* Tabel memenuhi lebar, tanpa jarak antar sel */
+  thead{background:#1e293b} /* Warna latar baris header tabel */
+  tr:hover{background:#172554} /* Efek hover pada baris tabel */
+  input,button{padding:8px 12px;border-radius:6px;border:none;margin:6px} /* Desain umum input dan tombol */
+  button{background:#06b6d4;color:#021322;font-weight:600;cursor:pointer} /* Warna tombol utama */
+  canvas{margin-top:20px;background:#1e293b;border-radius:10px;padding:10px} /* Area grafik (canvas) dengan latar dan radius */
+  footer{margin-top:10px;color:#9ca3af;font-size:13px} /* Teks footer kecil berwarna abu */
+</style> 
 </head>
-<body>
-<div class="container">
-  <header>
-    <div class="logo2">
-      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8QHF9kmbrKo7XYBYhAgT9r1fBX2nC-mA8sTdXhSo9OYtm970awNdh4Wx-KnD9WvMub6Vrd5-sVMZuxnOkkJQy3NCHDm4nK52_l0TR8ZnnPaUhM4OkyY9WjlgE_c3_rYZgJWS2OsmHI13II9NTTB7hNlvXO93um2daJokL8iEf7N227xC9yBTcSg/s320/GKL19_logo-kota-bandung%20-%20Koleksilogo.com.png" alt="Logo Kota Bandung">
+<body> <!-- Awal isi halaman -->
+<div class="container"> <!-- Pembungkus konten utama -->
+  <header> <!-- Bagian kepala halaman -->
+    <div class="logo2"> <!-- Area logo -->
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8QHF9kmbrKo7XYBYhAgT9r1fBX2nC-mA8sTdXhSo9OYtm970awNdh4Wx-KnD9WvMub6Vrd5-sVMZuxnOkkJQy3NCHDm4nK52_l0TR8ZnnPaUhM4OkyY9WjlgE_c3_rYZgJWS2OsmHI13II9NTTB7hNlvXO93um2daJokL8iEf7N227xC9yBTcSg/s320/GKL19_logo-kota-bandung%20-%20Koleksilogo.com.png" alt="Logo Kota Bandung"> <!-- Gambar logo Kota Bandung -->
     </div>
-    <h1>Statistik Kecamatan Kota Bandung</h1>
-    <p>Luas (km²), Jumlah Penduduk, dan Kepadatan (jiwa/km²)</p>
-    <div>
-      <button id="refreshBtn">Refresh</button>
-      <input id="search" type="search" placeholder="Cari kecamatan...">
+    <h1>Statistik Kecamatan Kota Bandung</h1> <!-- Judul utama -->
+    <p>Luas (km²), Jumlah Penduduk, dan Kepadatan (jiwa/km²)</p> <!-- Deskripsi subjudul -->
+    <div> <!-- Area tombol dan pencarian -->
+      <button id="refreshBtn">Refresh</button> <!-- Tombol untuk menyegarkan data -->
+      <input id="search" type="search" placeholder="Cari kecamatan..."> <!-- Kolom pencarian -->
     </div>
   </header>
 
-  <table id="statsTable">
+  <table id="statsTable"> <!-- Tabel utama untuk menampilkan data -->
     <thead>
-      <tr><th>#</th><th>Kecamatan</th><th>Luas (km²)</th><th>Jumlah Penduduk</th><th>Kepadatan</th></tr>
+      <tr><th>#</th><th>Kecamatan</th><th>Luas (km²)</th><th>Jumlah Penduduk</th><th>Kepadatan</th></tr> <!-- Header kolom -->
     </thead>
-    <tbody></tbody>
+    <tbody></tbody> <!-- Isi tabel akan diisi lewat JavaScript -->
   </table>
 
-  <canvas id="pieChart" width="400" height="400"></canvas>
+  <canvas id="pieChart" width="400" height="400"></canvas> <!-- Tempat untuk menampilkan diagram pie Chart.js -->
 
   <footer>
-    Jumlah kecamatan: <b id="kecamatanCount">30</b><br>
-    Sumber logo: KoleksiLogo.com
+    Jumlah kecamatan: <b id="kecamatanCount">30</b><br> <!-- Jumlah kecamatan ditampilkan di sini -->
+    Sumber logo: KoleksiLogo.com <!-- Info sumber gambar -->
   </footer>
 </div>
 
 <script>
-const data=[
+const data=[ // Array berisi objek tiap kecamatan
 {kec:'Andir',luas:2.15,penduduk:56841},{kec:'Astanaanyar',luas:3.12,penduduk:85902},
 {kec:'Babakan Ciparay',luas:6.54,penduduk:128900},{kec:'Bandung Kidul',luas:4.10,penduduk:73120},
 {kec:'Bandung Kulon',luas:2.37,penduduk:50648},{kec:'Bandung Wetan',luas:3.80,penduduk:65210},
@@ -64,31 +64,57 @@ const data=[
 {kec:'Rancasari',luas:5.05,penduduk:94000},{kec:'Regol',luas:3.90,penduduk:78000},
 {kec:'Sukajadi',luas:9.00,penduduk:107300},{kec:'Sukasari',luas:7.12,penduduk:98050},
 {kec:'Sumur Bandung',luas:6.50,penduduk:89120},{kec:'Ujung Berung',luas:16.30,penduduk:152400},
-{kec:'Cidadap (duplicate-check)',luas:0,penduduk:0}
+{kec:'Cidadap (duplicate-check)',luas:0,penduduk:0} // Data duplikat untuk pengecekan unik
 ];
-const unique=data.filter((v,i,a)=>a.findIndex(t=>t.kec===v.kec)===i);
-document.getElementById('kecamatanCount').textContent=unique.length;
-function density(x){return x.luas?Math.round(x.penduduk/x.luas):'—'}
-function render(list){
-  const tb=document.querySelector('#statsTable tbody');
+
+/* ====== FILTER DATA UNIK ====== */
+const unique=data.filter((v,i,a)=>a.findIndex(t=>t.kec===v.kec)===i); // Menghapus duplikat berdasarkan nama kecamatan
+
+/* ====== MENAMPILKAN JUMLAH KECAMATAN ====== */
+document.getElementById('kecamatanCount').textContent=unique.length; // Menampilkan jumlah kecamatan unik ke footer
+
+
+/* ====== FUNGSI MENGHITUNG KEPADATAN ====== */
+function density(x){return x.luas?Math.round(x.penduduk/x.luas):'—'} // Rumus: penduduk / luas (dibulatkan)
+
+
+/* ====== FUNGSI MENAMPILKAN DATA DI TABEL ====== */
+function render(list){ // list = data yang ingin ditampilkan
+  const tb=document.querySelector('#statsTable tbody'); // Ambil elemen tbody tabel
   tb.innerHTML=list.map((r,i)=>`
     <tr><td>${i+1}</td><td><b>${r.kec}</b></td>
     <td>${r.luas?.toFixed(2)||'—'}</td>
     <td>${r.penduduk.toLocaleString('id-ID')}</td>
-    <td>${density(r).toLocaleString?.('id-ID')||density(r)}</td></tr>`).join('');
+    <td>${density(r).toLocaleString?.('id-ID')||density(r)}</td></tr>`).join(''); // Buat baris HTML untuk setiap kecamatan dan tampilkan
 }
-render(unique);
-document.getElementById('search').oninput=e=>{
-  const v=e.target.value.toLowerCase();
-  render(unique.filter(x=>x.kec.toLowerCase().includes(v)));
+
+/* ====== PANGGIL FUNGSI render() UNTUK AWAL ====== */
+render(unique); // Menampilkan seluruh data pertama kali
+
+/* ====== FITUR PENCARIAN KECAMATAN ====== */
+document.getElementById('search').oninput=e=>{ // Saat mengetik di kolom pencarian
+  const v=e.target.value.toLowerCase(); // Ambil teks input dan ubah ke huruf kecil
+  render(unique.filter(x=>x.kec.toLowerCase().includes(v))); // Tampilkan hanya kecamatan yang cocok
 };
-document.getElementById('refreshBtn').onclick=()=>render(unique);
-new Chart(document.getElementById('pieChart'),{
-  type:'pie',
-  data:{labels:unique.map(d=>d.kec),datasets:[{data:unique.map(d=>d.penduduk),
-  backgroundColor:unique.map(()=>`hsl(${Math.random()*360},70%,50%)`)}]},
-  options:{plugins:{legend:{position:'bottom',labels:{color:'#e6eef6'}},
-  title:{display:true,text:'Distribusi Penduduk per Kecamatan',color:'#e6eef6'}}}
+
+/* ====== TOMBOL REFRESH UNTUK MENGEMBALIKAN SEMUA DATA ====== */
+document.getElementById('refreshBtn').onclick=()=>render(unique); // Saat tombol ditekan, tampilkan semua lagi
+
+/* ====== MEMBUAT DIAGRAM PIE MENGGUNAKAN CHART.JS ====== */
+new Chart(document.getElementById('pieChart'),{ // Buat grafik di elemen canvas
+  type:'pie', // Jenis grafik pie chart
+  data:{labels:unique.map(d=>d.kec), // Label = nama kecamatan
+  datasets:[{
+    data:unique.map(d=>d.penduduk), // Data = jumlah penduduk tiap kecamatan
+    backgroundColor:unique.map(()=>`hsl(${Math.random()*360},70%,50%)`) // Warna acak untuk tiap bagian pie
+  }]
+},
+  options:
+  {plugins:{
+    legend:{position:'bottom',labels:{color:'#e6eef6'}}, // Letak legenda di bawah dengan teks putih
+    title:{display:true,text:'Distribusi Penduduk per Kecamatan',color:'#e6eef6'} // Judul grafik
+  }
+}
 });
 </script>
 </body>
