@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statistik Kecamatan Kota Bandung</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body{margin:0;font-family:Inter,system-ui;background:#0f172a;color:#e6eef6;padding:24px;text-align:center}
+  .container{max-width:1000px;margin:auto;background:#0b1220b0;padding:20px;border-radius:12px}
+  .logo2 img{width:120px;margin-bottom:10px;background:#fff;border-radius:8px;padding:6px}
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+  th,td{padding:8px 10px;border:1px solid #1e293b}
+  thead{background:#1e293b}
+  tr:hover{background:#172554}
+  input,button{padding:8px 12px;border-radius:6px;border:none;margin:6px}
+  button{background:#06b6d4;color:#021322;font-weight:600;cursor:pointer}
+  canvas{margin-top:20px;background:#1e293b;border-radius:10px;padding:10px}
+  footer{margin-top:10px;color:#9ca3af;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo2">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8QHF9kmbrKo7XYBYhAgT9r1fBX2nC-mA8sTdXhSo9OYtm970awNdh4Wx-KnD9WvMub6Vrd5-sVMZuxnOkkJQy3NCHDm4nK52_l0TR8ZnnPaUhM4OkyY9WjlgE_c3_rYZgJWS2OsmHI13II9NTTB7hNlvXO93um2daJokL8iEf7N227xC9yBTcSg/s320/GKL19_logo-kota-bandung%20-%20Koleksilogo.com.png" alt="Logo Kota Bandung">
+    </div>
+    <h1>Statistik Kecamatan Kota Bandung</h1>
+    <p>Luas (km²), Jumlah Penduduk, dan Kepadatan (jiwa/km²)</p>
+    <div>
+      <button id="refreshBtn">Refresh</button>
+      <input id="search" type="search" placeholder="Cari kecamatan...">
+    </div>
+  </header>
+
+  <table id="statsTable">
+    <thead>
+      <tr><th>#</th><th>Kecamatan</th><th>Luas (km²)</th><th>Jumlah Penduduk</th><th>Kepadatan</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <canvas id="pieChart" width="400" height="400"></canvas>
+
+  <footer>
+    Jumlah kecamatan: <b id="kecamatanCount">30</b><br>
+    Sumber logo: KoleksiLogo.com
+  </footer>
+</div>
+
+<script>
+const data=[
+{kec:'Andir',luas:2.15,penduduk:56841},{kec:'Astanaanyar',luas:3.12,penduduk:85902},
+{kec:'Babakan Ciparay',luas:6.54,penduduk:128900},{kec:'Bandung Kidul',luas:4.10,penduduk:73120},
+{kec:'Bandung Kulon',luas:2.37,penduduk:50648},{kec:'Bandung Wetan',luas:3.80,penduduk:65210},
+{kec:'Batununggal',luas:6.21,penduduk:156900},{kec:'Bojongloa Kaler',luas:3.03,penduduk:120000},
+{kec:'Bojongloa Kidul',luas:2.25,penduduk:90120},{kec:'Buahbatu',luas:11.40,penduduk:142300},
+{kec:'Cibeunying Kaler',luas:5.02,penduduk:112000},{kec:'Cibeunying Kidul',luas:4.80,penduduk:98000},
+{kec:'Cibiru',luas:15.30,penduduk:120500},{kec:'Cicendo',luas:4.72,penduduk:84500},
+{kec:'Cidadap',luas:7.60,penduduk:66000},{kec:'Cinambo',luas:10.04,penduduk:98000},
+{kec:'Coblong',luas:6.10,penduduk:123400},{kec:'Gedebage',luas:18.22,penduduk:76000},
+{kec:'Kiaracondong',luas:8.34,penduduk:143200},{kec:'Lengkong',luas:4.11,penduduk:82100},
+{kec:'Mandalajati',luas:12.40,penduduk:89000},{kec:'Panyileukan',luas:8.90,penduduk:71200},
+{kec:'Rancasari',luas:5.05,penduduk:94000},{kec:'Regol',luas:3.90,penduduk:78000},
+{kec:'Sukajadi',luas:9.00,penduduk:107300},{kec:'Sukasari',luas:7.12,penduduk:98050},
+{kec:'Sumur Bandung',luas:6.50,penduduk:89120},{kec:'Ujung Berung',luas:16.30,penduduk:152400},
+{kec:'Cidadap (duplicate-check)',luas:0,penduduk:0}
+];
+const unique=data.filter((v,i,a)=>a.findIndex(t=>t.kec===v.kec)===i);
+document.getElementById('kecamatanCount').textContent=unique.length;
+function density(x){return x.luas?Math.round(x.penduduk/x.luas):'—'}
+function render(list){
+  const tb=document.querySelector('#statsTable tbody');
+  tb.innerHTML=list.map((r,i)=>`
+    <tr><td>${i+1}</td><td><b>${r.kec}</b></td>
+    <td>${r.luas?.toFixed(2)||'—'}</td>
+    <td>${r.penduduk.toLocaleString('id-ID')}</td>
+    <td>${density(r).toLocaleString?.('id-ID')||density(r)}</td></tr>`).join('');
+}
+render(unique);
+document.getElementById('search').oninput=e=>{
+  const v=e.target.value.toLowerCase();
+  render(unique.filter(x=>x.kec.toLowerCase().includes(v)));
+};
+document.getElementById('refreshBtn').onclick=()=>render(unique);
+new Chart(document.getElementById('pieChart'),{
+  type:'pie',
+  data:{labels:unique.map(d=>d.kec),datasets:[{data:unique.map(d=>d.penduduk),
+  backgroundColor:unique.map(()=>`hsl(${Math.random()*360},70%,50%)`)}]},
+  options:{plugins:{legend:{position:'bottom',labels:{color:'#e6eef6'}},
+  title:{display:true,text:'Distribusi Penduduk per Kecamatan',color:'#e6eef6'}}}
+});
+</script>
+</body>
+</html>
